@@ -12,6 +12,11 @@ async function main() {
   const uSDFoo = await USDFoo.deploy();
   await uSDFoo.deployed();
   console.log("USDFoo deployed to:", uSDFoo.address);
+
+  const Bank = await hre.ethers.getContractFactory("Bank");
+  const bank = await Bank.deploy(uSDFoo.address);
+  await bank.deployed();
+  console.log("Bank deployed to:", bank.address);
 }
 
 main()

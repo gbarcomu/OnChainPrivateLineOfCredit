@@ -2,8 +2,8 @@
 import Image from 'react-bootstrap/Image';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
-import { loadEthereumChainId, switchNetwork, openLineOfCredit } from './ethereumConnector.js';
-import { useEffect, useState } from 'react';
+import { loadEthereumChainId, switchNetwork } from './ethereumConnector.js';
+import { useEffect } from 'react';
 import { Menu } from './Menu';
 import { Contract } from './Contract';
 import { WithdrawProof } from './WithdrawProof';
@@ -28,7 +28,8 @@ function ATM() {
     <div>
       <Menu />
       <Row>
-        <Col xs={6}>
+        <Col></Col>
+        <Col xs={5}>
           <Row>
             <Col></Col>
             <Col xs={4}>
@@ -40,7 +41,7 @@ function ATM() {
             <WithdrawProof />
           </Row>
         </Col>
-        <Col xs={6}>
+        <Col xs={5}>
         <Row>
             <Col></Col>
             <Col xs={4}>
@@ -52,6 +53,7 @@ function ATM() {
             <Contract />
           </Row>
         </Col>
+        <Col></Col>
       </Row>
     </div>
   );

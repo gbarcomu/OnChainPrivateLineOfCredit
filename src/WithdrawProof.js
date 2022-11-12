@@ -1,5 +1,4 @@
 import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import { withdrawWithProof } from './ethereumConnector.js';

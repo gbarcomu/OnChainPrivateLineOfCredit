@@ -31,15 +31,12 @@ async function createProof(userSecretKey: string, withdraw: number, totalAllowan
         abi.totalAllowance = toFixedHex(totalAllowance, true);
         abi.totalAllowanceHash = `0x${hashAllowance.toString('hex')}`;
         abi.return = `0x${hashReturn.toString('hex')}`;
-        console.log("ABIRETURN");
-        console.log(abi);
         let [prover, verifier] = await setup_generic_prover_and_verifier(acir);
 
         const proof = await create_proof(prover, acir, abi);
         console.log(`0x${proof.toString('hex')}`);
-        const verified = await verify_proof(verifier, proof);
+        //const verified = await verify_proof(verifier, proof);
       
-        console.log(verified);
     };
 
     function argControl() {

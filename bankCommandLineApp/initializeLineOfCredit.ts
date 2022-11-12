@@ -21,7 +21,7 @@ async function calculatePedersen(userSecretKey: Buffer, parameter: number) {
 
 function argControl() {
     if (process.argv.length != 5) {
-        console.log('Usage: npx ts-node calculatePedersen.ts {userId} {maximumAllowance} {interestRate}');
+        console.log('Usage: npx ts-node initializeLineOfCredit.ts {userId} {maximumAllowance} {interestRate}');
         process.exit();
     }
 }

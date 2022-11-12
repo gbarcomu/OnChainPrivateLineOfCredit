@@ -28,14 +28,28 @@ contract Bank {
         turboVerifier = TurboVerifier(turboVerifierAddress);
     }
 
-    function verifyProof(bytes calldata proof) public {
-       usdFoo.transfer(msg.sender, 1000);
-       emit tokensSuccessfullyCreated(1000);
+    function withdrawWithProof(bytes calldata proof, uint256 userId) public {
+        bytes32 _maximumAllowanceHash;
+        assembly {
+                _maximumAllowanceHash := calldataload(add(calldataload(0x04), 0x24))
+        }
+        require(_maximumAllowanceHash == userId_userStatus[userId].maximumAllowanceHash, "Maximum amount not correct");
+        require(turboVerifier.verify(proof) == true, "Not valid proof");
+        usdFoo.transfer(msg.sender, 100); //TODO Extract amount from the proof
+        emit tokensSuccessfullyCreated(100);
     }
 
-    function withdrawWithProof(bytes calldata proof) public returns (bool) {
+    function verifyProof(bytes calldata proof) public view returns (bool) {
        bool isGood = turboVerifier.verify(proof);
        return isGood;
+    }
+
+    function getMaximumAmount(bytes calldata proof) public view returns (bytes32) {
+        bytes32 _maximumAllowanceHash;
+        assembly {
+                _maximumAllowanceHash := calldataload(add(calldataload(0x04), 0x24))
+        }
+       return _maximumAllowanceHash;
     }
 
     // NOTE: This function should be onlyOwner, however, for the shake of the demo, can be accessed by anyone

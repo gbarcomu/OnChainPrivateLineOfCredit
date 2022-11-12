@@ -9,6 +9,7 @@ import { useState } from 'react';
 function WithdrawProof() {
 
   const [proofData, setProofData] = useState();
+  const [userId, setUserId] = useState(0);
   const [withdrawedAmount, setWithdrawedAmount] = useState();
 
   const [show, setShow] = useState(false);
@@ -22,7 +23,7 @@ function WithdrawProof() {
   async function handleSubmit(event) {
     event.preventDefault();
     try {
-      withdrawWithProof(proofData).then(val => {
+      withdrawWithProof(proofData, userId).then(val => {
         setWithdrawedAmount(parseInt(val.logs[0].data, 16));
         handleShow();
         console.log(val);
@@ -39,6 +40,10 @@ function WithdrawProof() {
         <Form.Group className="mb-3">
           <Form.Label>Proof Data</Form.Label>
           <Form.Control as="textarea" rows={3} onChange={e => setProofData(e.target.value)} />
+        </Form.Group>
+        <Form.Group className="mb-3">
+          <Form.Label>UserId</Form.Label>
+          <Form.Control type="number" onChange={e => setUserId(e.target.value)} />
         </Form.Group>
         <Button variant="dark" type="submit">Submit</Button>
       </Form>

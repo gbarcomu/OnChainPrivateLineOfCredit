@@ -22,14 +22,19 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 interface BankInterface extends ethers.utils.Interface {
   functions: {
     "getLineOfCredit(uint256)": FunctionFragment;
+    "getMaximumAmount(bytes)": FunctionFragment;
     "openLineOfCredit(uint256,bytes32,bytes32,bytes32,bytes32)": FunctionFragment;
     "verifyProof(bytes)": FunctionFragment;
-    "withdrawWithProof(bytes)": FunctionFragment;
+    "withdrawWithProof(bytes,uint256)": FunctionFragment;
   };
 
   encodeFunctionData(
     functionFragment: "getLineOfCredit",
     values: [BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getMaximumAmount",
+    values: [BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "openLineOfCredit",
@@ -41,11 +46,15 @@ interface BankInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "withdrawWithProof",
-    values: [BytesLike]
+    values: [BytesLike, BigNumberish]
   ): string;
 
   decodeFunctionResult(
     functionFragment: "getLineOfCredit",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getMaximumAmount",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
@@ -124,6 +133,16 @@ export class Bank extends Contract {
       overrides?: CallOverrides
     ): Promise<[string, string, string, string]>;
 
+    getMaximumAmount(
+      proof: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
+    "getMaximumAmount(bytes)"(
+      proof: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[string]>;
+
     openLineOfCredit(
       userId: BigNumberish,
       _maximumAllowanceHash: BytesLike,
@@ -144,21 +163,23 @@ export class Bank extends Contract {
 
     verifyProof(
       proof: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
 
     "verifyProof(bytes)"(
       proof: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
-    ): Promise<ContractTransaction>;
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
 
     withdrawWithProof(
       proof: BytesLike,
+      userId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
-    "withdrawWithProof(bytes)"(
+    "withdrawWithProof(bytes,uint256)"(
       proof: BytesLike,
+      userId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
   };
@@ -172,6 +193,16 @@ export class Bank extends Contract {
     userId: BigNumberish,
     overrides?: CallOverrides
   ): Promise<[string, string, string, string]>;
+
+  getMaximumAmount(
+    proof: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<string>;
+
+  "getMaximumAmount(bytes)"(
+    proof: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<string>;
 
   openLineOfCredit(
     userId: BigNumberish,
@@ -191,23 +222,22 @@ export class Bank extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  verifyProof(
-    proof: BytesLike,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+  verifyProof(proof: BytesLike, overrides?: CallOverrides): Promise<boolean>;
 
   "verifyProof(bytes)"(
     proof: BytesLike,
-    overrides?: Overrides & { from?: string | Promise<string> }
-  ): Promise<ContractTransaction>;
+    overrides?: CallOverrides
+  ): Promise<boolean>;
 
   withdrawWithProof(
     proof: BytesLike,
+    userId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  "withdrawWithProof(bytes)"(
+  "withdrawWithProof(bytes,uint256)"(
     proof: BytesLike,
+    userId: BigNumberish,
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -221,6 +251,16 @@ export class Bank extends Contract {
       userId: BigNumberish,
       overrides?: CallOverrides
     ): Promise<[string, string, string, string]>;
+
+    getMaximumAmount(
+      proof: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<string>;
+
+    "getMaximumAmount(bytes)"(
+      proof: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<string>;
 
     openLineOfCredit(
       userId: BigNumberish,
@@ -240,22 +280,24 @@ export class Bank extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    verifyProof(proof: BytesLike, overrides?: CallOverrides): Promise<void>;
+    verifyProof(proof: BytesLike, overrides?: CallOverrides): Promise<boolean>;
 
     "verifyProof(bytes)"(
       proof: BytesLike,
       overrides?: CallOverrides
-    ): Promise<void>;
+    ): Promise<boolean>;
 
     withdrawWithProof(
       proof: BytesLike,
+      userId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<boolean>;
+    ): Promise<void>;
 
-    "withdrawWithProof(bytes)"(
+    "withdrawWithProof(bytes,uint256)"(
       proof: BytesLike,
+      userId: BigNumberish,
       overrides?: CallOverrides
-    ): Promise<boolean>;
+    ): Promise<void>;
   };
 
   filters: {
@@ -279,6 +321,16 @@ export class Bank extends Contract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    getMaximumAmount(
+      proof: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getMaximumAmount(bytes)"(
+      proof: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     openLineOfCredit(
       userId: BigNumberish,
       _maximumAllowanceHash: BytesLike,
@@ -299,21 +351,23 @@ export class Bank extends Contract {
 
     verifyProof(
       proof: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     "verifyProof(bytes)"(
       proof: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<BigNumber>;
 
     withdrawWithProof(
       proof: BytesLike,
+      userId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
-    "withdrawWithProof(bytes)"(
+    "withdrawWithProof(bytes,uint256)"(
       proof: BytesLike,
+      userId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
@@ -329,6 +383,16 @@ export class Bank extends Contract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    getMaximumAmount(
+      proof: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getMaximumAmount(bytes)"(
+      proof: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     openLineOfCredit(
       userId: BigNumberish,
       _maximumAllowanceHash: BytesLike,
@@ -349,21 +413,23 @@ export class Bank extends Contract {
 
     verifyProof(
       proof: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     "verifyProof(bytes)"(
       proof: BytesLike,
-      overrides?: Overrides & { from?: string | Promise<string> }
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
     withdrawWithProof(
       proof: BytesLike,
+      userId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
-    "withdrawWithProof(bytes)"(
+    "withdrawWithProof(bytes,uint256)"(
       proof: BytesLike,
+      userId: BigNumberish,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };

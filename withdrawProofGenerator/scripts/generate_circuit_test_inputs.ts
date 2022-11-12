@@ -7,8 +7,8 @@ let pedersen: SinglePedersen;
 async function main() {
 
 
-    const usc = Buffer.from("f07a4fe007bf0fa358acab7613c817f39970cd0e0684cdac092353bdd0239d4b", "hex");
-    const tempfoo = Buffer.from("0000000000000000000000000000000000000000000000000000000000000005", "hex");
+    const usc = Buffer.from("fca8621cfe1222e9a93492aa34c7ee1920003ff5b0bb5d6addc5e2e9d8cb382e", "hex");
+    const tempfoo = Buffer.from("00000000000000000000000000000000000000000000000000000000000003e8", "hex");
     await calculatePedersen2(tempfoo, usc);
 
     const tempfoo2 = Buffer.from("000000000000000000000000000000000000000000000000000000000000000a", "hex");

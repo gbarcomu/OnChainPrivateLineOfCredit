@@ -23,8 +23,8 @@ async function createProof(userSecretKey: string, withdraw: number, totalAllowan
         let acir = compiled_program.circuit;
         const abi = compiled_program.abi;
 
-        let hashReturn = pedersen.compressInputs([Buffer.from(toFixedHex(withdraw, false), 'hex')]);
-        let hashAllowance = pedersen.compressInputs([Buffer.from(toFixedHex(totalAllowance, false), 'hex')]);
+        let hashReturn = pedersen.compressInputs([Buffer.from(toFixedHex(withdraw, false), 'hex'), Buffer.from(userSecretKey.substring(2), 'hex')]);
+        let hashAllowance = pedersen.compressInputs([Buffer.from(toFixedHex(totalAllowance, false), 'hex'), Buffer.from(userSecretKey.substring(2), 'hex')]);
 
         abi.userSecretKey = userSecretKey
         abi.withdraw = toFixedHex(withdraw, true);

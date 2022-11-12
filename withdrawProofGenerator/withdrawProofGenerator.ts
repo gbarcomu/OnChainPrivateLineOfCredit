@@ -13,7 +13,7 @@ const toFixedHex = (number: number, pad0x: boolean, length = 32) => {
     let hexString = number.toString(16).padStart(length * 2, '0');
     return (pad0x ? `0x` + hexString : hexString);
   }
-async function createProof() {  
+async function createProof(userSecretKey: string, withdraw: number, totalAllowance: number) {  
          
         barretenberg = await BarretenbergWasm.new();
         await barretenberg.init()
@@ -23,12 +23,12 @@ async function createProof() {
         let acir = compiled_program.circuit;
         const abi = compiled_program.abi;
 
-        let hashReturn = pedersen.compressInputs([Buffer.from(toFixedHex(5, false), 'hex')]);
-        let hashAllowance = pedersen.compressInputs([Buffer.from(toFixedHex(10, false), 'hex')]);
+        let hashReturn = pedersen.compressInputs([Buffer.from(toFixedHex(withdraw, false), 'hex')]);
+        let hashAllowance = pedersen.compressInputs([Buffer.from(toFixedHex(totalAllowance, false), 'hex')]);
 
-
-        abi.withdraw = "0x0000000000000000000000000000000000000000000000000000000000000005";
-        abi.totalAllowance = "0x000000000000000000000000000000000000000000000000000000000000000a";
+        abi.userSecretKey = userSecretKey
+        abi.withdraw = toFixedHex(withdraw, true);
+        abi.totalAllowance = toFixedHex(totalAllowance, true);
         abi.totalAllowanceHash = `0x${hashAllowance.toString('hex')}`;
         abi.return = `0x${hashReturn.toString('hex')}`;
         let [prover, _] = await setup_generic_prover_and_verifier(acir);
@@ -37,4 +37,18 @@ async function createProof() {
         console.log(`0x${proof.toString('hex')}`);
     };
 
-createProof().then(() => process.exit(0)).catch(console.log);
+    function argControl() {
+      if (process.argv.length != 5) {
+          console.log('Usage: npx ts-node withdrawProofGenerator.ts {userSecretKey} {withdraw} {totalAllowance}');
+          process.exit();
+      }
+  }
+
+  async function main() {
+
+    argControl()
+
+    await createProof(process.argv[2], +process.argv[3], +process.argv[4]);
+  }
+
+main().then(() => process.exit(0)).catch(console.log);

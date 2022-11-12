@@ -1,7 +1,7 @@
 import { ethers } from 'ethers'
-//import ERC20 from './artifacts/contracts/USDFoo.sol/USDFoo.json'
+import USDFoo from './artifacts/contracts/USDFoo.sol/USDFoo.json'
 import Bank from './artifacts/contracts/Bank.sol/Bank.json'
-import {CHAIN_ID, CHAIN_NAME, RPC_URL, BANK_ADDRESS} from './Constants'
+import {CHAIN_ID, CHAIN_NAME, RPC_URL, BANK_ADDRESS, USD_FOO_ADDRESS} from './Constants'
 
 export function isMetaMaskInstalled() {
     const { ethereum } = window;
@@ -45,6 +45,18 @@ export async function switchNetwork() {
             } catch (addError) {
             }
         }
+    }
+}
+
+export async function getUSDFBalance() {
+    const account = await loadEthereumAccount();
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const contract = new ethers.Contract(USD_FOO_ADDRESS, USDFoo.abi, provider);
+    try {
+        const data = await contract.balanceOf(account);
+        return data.toNumber();
+    } catch (err) {
+        console.error(err)
     }
 }
 

@@ -22,15 +22,24 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 interface BankInterface extends ethers.utils.Interface {
   functions: {
     "openLineOfCredit(uint256,bytes32,bytes32,bytes32,bytes32)": FunctionFragment;
+    "verifyProof(bytes)": FunctionFragment;
   };
 
   encodeFunctionData(
     functionFragment: "openLineOfCredit",
     values: [BigNumberish, BytesLike, BytesLike, BytesLike, BytesLike]
   ): string;
+  encodeFunctionData(
+    functionFragment: "verifyProof",
+    values: [BytesLike]
+  ): string;
 
   decodeFunctionResult(
     functionFragment: "openLineOfCredit",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "verifyProof",
     data: BytesLike
   ): Result;
 
@@ -102,6 +111,16 @@ export class Bank extends Contract {
       _accruedInterestsHash: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
+
+    verifyProof(
+      proof: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
+
+    "verifyProof(bytes)"(
+      proof: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<[boolean]>;
   };
 
   openLineOfCredit(
@@ -122,6 +141,13 @@ export class Bank extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  verifyProof(proof: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+
+  "verifyProof(bytes)"(
+    proof: BytesLike,
+    overrides?: CallOverrides
+  ): Promise<boolean>;
+
   callStatic: {
     openLineOfCredit(
       userId: BigNumberish,
@@ -140,6 +166,13 @@ export class Bank extends Contract {
       _accruedInterestsHash: BytesLike,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    verifyProof(proof: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+
+    "verifyProof(bytes)"(
+      proof: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
   };
 
   filters: {
@@ -166,6 +199,16 @@ export class Bank extends Contract {
       _accruedInterestsHash: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
+
+    verifyProof(
+      proof: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "verifyProof(bytes)"(
+      proof: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
   };
 
   populateTransaction: {
@@ -185,6 +228,16 @@ export class Bank extends Contract {
       _interestRateHash: BytesLike,
       _accruedInterestsHash: BytesLike,
       overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    verifyProof(
+      proof: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "verifyProof(bytes)"(
+      proof: BytesLike,
+      overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
   };
 }

@@ -21,10 +21,15 @@ import { TypedEventFilter, TypedEvent, TypedListener } from "./commons";
 
 interface BankInterface extends ethers.utils.Interface {
   functions: {
+    "getLineOfCredit(uint256)": FunctionFragment;
     "openLineOfCredit(uint256,bytes32,bytes32,bytes32,bytes32)": FunctionFragment;
     "verifyProof(bytes)": FunctionFragment;
   };
 
+  encodeFunctionData(
+    functionFragment: "getLineOfCredit",
+    values: [BigNumberish]
+  ): string;
   encodeFunctionData(
     functionFragment: "openLineOfCredit",
     values: [BigNumberish, BytesLike, BytesLike, BytesLike, BytesLike]
@@ -34,6 +39,10 @@ interface BankInterface extends ethers.utils.Interface {
     values: [BytesLike]
   ): string;
 
+  decodeFunctionResult(
+    functionFragment: "getLineOfCredit",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "openLineOfCredit",
     data: BytesLike
@@ -94,6 +103,16 @@ export class Bank extends Contract {
   interface: BankInterface;
 
   functions: {
+    getLineOfCredit(
+      userId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string, string, string, string]>;
+
+    "getLineOfCredit(uint256)"(
+      userId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string, string, string, string]>;
+
     openLineOfCredit(
       userId: BigNumberish,
       _maximumAllowanceHash: BytesLike,
@@ -123,6 +142,16 @@ export class Bank extends Contract {
     ): Promise<[boolean]>;
   };
 
+  getLineOfCredit(
+    userId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<[string, string, string, string]>;
+
+  "getLineOfCredit(uint256)"(
+    userId: BigNumberish,
+    overrides?: CallOverrides
+  ): Promise<[string, string, string, string]>;
+
   openLineOfCredit(
     userId: BigNumberish,
     _maximumAllowanceHash: BytesLike,
@@ -149,6 +178,16 @@ export class Bank extends Contract {
   ): Promise<boolean>;
 
   callStatic: {
+    getLineOfCredit(
+      userId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string, string, string, string]>;
+
+    "getLineOfCredit(uint256)"(
+      userId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<[string, string, string, string]>;
+
     openLineOfCredit(
       userId: BigNumberish,
       _maximumAllowanceHash: BytesLike,
@@ -182,6 +221,16 @@ export class Bank extends Contract {
   };
 
   estimateGas: {
+    getLineOfCredit(
+      userId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
+    "getLineOfCredit(uint256)"(
+      userId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<BigNumber>;
+
     openLineOfCredit(
       userId: BigNumberish,
       _maximumAllowanceHash: BytesLike,
@@ -212,6 +261,16 @@ export class Bank extends Contract {
   };
 
   populateTransaction: {
+    getLineOfCredit(
+      userId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
+    "getLineOfCredit(uint256)"(
+      userId: BigNumberish,
+      overrides?: CallOverrides
+    ): Promise<PopulatedTransaction>;
+
     openLineOfCredit(
       userId: BigNumberish,
       _maximumAllowanceHash: BytesLike,

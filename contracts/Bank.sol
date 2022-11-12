@@ -40,5 +40,13 @@ contract Bank {
         emit lineSuccessfullyCreated(true);
     }
 
-    
+    function getLineOfCredit(uint256 userId) public view returns(bytes32, bytes32, bytes32, bytes32){
+        UserStatus memory userStatus = userId_userStatus[userId];
+        return (
+                userStatus.maximumAllowanceHash,
+                userStatus.disposedAmountHash,
+                userStatus.interestRateHash,
+                userStatus.accruedInterestsHash
+        );
+    }
 }

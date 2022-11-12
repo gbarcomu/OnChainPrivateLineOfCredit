@@ -60,6 +60,17 @@ export async function getUSDFBalance() {
     }
 }
 
+export async function getLineOfCredit(userId) {
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const contract = new ethers.Contract(BANK_ADDRESS, Bank.abi, provider);
+    try {
+        const data = await contract.getLineOfCredit(userId);
+        return data;
+    } catch (err) {
+        console.error(err)
+    }
+}
+
 export async function openLineOfCredit(creditLineParameters) {
     await loadEthereumAccount();
     const provider = new ethers.providers.Web3Provider(window.ethereum);

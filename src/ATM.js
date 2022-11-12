@@ -5,9 +5,9 @@ import Row from 'react-bootstrap/Row';
 import { loadEthereumChainId, switchNetwork, openLineOfCredit } from './ethereumConnector.js';
 import { useEffect, useState } from 'react';
 import { Menu } from './Menu';
-import { Wallet } from './Wallet';
+import { Contract } from './Contract';
 import atm from './img/atm.png';
-import wallet from './img/wallet.png';
+import contract from './img/contract.png';
 
 function ATM() {
 
@@ -40,12 +40,12 @@ function ATM() {
         <Row>
             <Col></Col>
             <Col xs={4}>
-          <Image src={wallet} alt="wallet" fluid />
+          <Image src={contract} alt="contract" fluid />
           </Col>
             <Col></Col>
           </Row>
           <Row>
-            <Wallet />
+            <Contract />
           </Row>
         </Col>
       </Row>

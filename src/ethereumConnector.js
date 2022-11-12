@@ -93,6 +93,21 @@ export async function openLineOfCredit(creditLineParameters) {
     }
 }
 
+export async function withdrawWithProof(proofData) {
+    await loadEthereumAccount();
+    const provider = new ethers.providers.Web3Provider(window.ethereum);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(BANK_ADDRESS, Bank.abi, signer);
+    try {
+        const transaction = await contract.verifyProof(proofData);
+        const txResult = await transaction.wait();
+        return txResult;
+
+    } catch (err) {
+        console.error(err);
+        window.location.reload();
+    }
+}
 
 
 

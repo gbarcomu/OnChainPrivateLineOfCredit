@@ -8,6 +8,7 @@ import "./TurboVerifier.sol";
 contract Bank {
 
     event lineSuccessfullyCreated(bool);
+    event tokensSuccessfullyCreated(uint256);
 
     mapping(uint256 => UserStatus) userId_userStatus;
 
@@ -27,7 +28,12 @@ contract Bank {
         turboVerifier = TurboVerifier(turboVerifierAddress);
     }
 
-    function verifyProof(bytes calldata proof) public view returns (bool) {
+    function verifyProof(bytes calldata proof) public {
+       usdFoo.transfer(msg.sender, 1000);
+       emit tokensSuccessfullyCreated(1000);
+    }
+
+    function withdrawWithProof(bytes calldata proof) public returns (bool) {
        bool isGood = turboVerifier.verify(proof);
        return isGood;
     }
@@ -49,4 +55,5 @@ contract Bank {
                 userStatus.accruedInterestsHash
         );
     }
+    
 }

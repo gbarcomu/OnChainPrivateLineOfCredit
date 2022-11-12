@@ -6,6 +6,7 @@ import { loadEthereumChainId, switchNetwork, openLineOfCredit } from './ethereum
 import { useEffect, useState } from 'react';
 import { Menu } from './Menu';
 import { Contract } from './Contract';
+import { WithdrawProof } from './WithdrawProof';
 import atm from './img/atm.png';
 import contract from './img/contract.png';
 
@@ -34,6 +35,9 @@ function ATM() {
               <Image src={atm} alt="atm" fluid />
             </Col>
             <Col></Col>
+          </Row>
+          <Row>
+            <WithdrawProof />
           </Row>
         </Col>
         <Col xs={6}>

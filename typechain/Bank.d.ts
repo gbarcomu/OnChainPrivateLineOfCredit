@@ -24,6 +24,7 @@ interface BankInterface extends ethers.utils.Interface {
     "getLineOfCredit(uint256)": FunctionFragment;
     "openLineOfCredit(uint256,bytes32,bytes32,bytes32,bytes32)": FunctionFragment;
     "verifyProof(bytes)": FunctionFragment;
+    "withdrawWithProof(bytes)": FunctionFragment;
   };
 
   encodeFunctionData(
@@ -36,6 +37,10 @@ interface BankInterface extends ethers.utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "verifyProof",
+    values: [BytesLike]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "withdrawWithProof",
     values: [BytesLike]
   ): string;
 
@@ -51,12 +56,18 @@ interface BankInterface extends ethers.utils.Interface {
     functionFragment: "verifyProof",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(
+    functionFragment: "withdrawWithProof",
+    data: BytesLike
+  ): Result;
 
   events: {
     "lineSuccessfullyCreated(bool)": EventFragment;
+    "tokensSuccessfullyCreated(uint256)": EventFragment;
   };
 
   getEvent(nameOrSignatureOrTopic: "lineSuccessfullyCreated"): EventFragment;
+  getEvent(nameOrSignatureOrTopic: "tokensSuccessfullyCreated"): EventFragment;
 }
 
 export class Bank extends Contract {
@@ -133,13 +144,23 @@ export class Bank extends Contract {
 
     verifyProof(
       proof: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
 
     "verifyProof(bytes)"(
       proof: BytesLike,
-      overrides?: CallOverrides
-    ): Promise<[boolean]>;
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    withdrawWithProof(
+      proof: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
+    "withdrawWithProof(bytes)"(
+      proof: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
   };
 
   getLineOfCredit(
@@ -170,12 +191,25 @@ export class Bank extends Contract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
-  verifyProof(proof: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+  verifyProof(
+    proof: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   "verifyProof(bytes)"(
     proof: BytesLike,
-    overrides?: CallOverrides
-  ): Promise<boolean>;
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  withdrawWithProof(
+    proof: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
+  "withdrawWithProof(bytes)"(
+    proof: BytesLike,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
 
   callStatic: {
     getLineOfCredit(
@@ -206,9 +240,19 @@ export class Bank extends Contract {
       overrides?: CallOverrides
     ): Promise<void>;
 
-    verifyProof(proof: BytesLike, overrides?: CallOverrides): Promise<boolean>;
+    verifyProof(proof: BytesLike, overrides?: CallOverrides): Promise<void>;
 
     "verifyProof(bytes)"(
+      proof: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<void>;
+
+    withdrawWithProof(
+      proof: BytesLike,
+      overrides?: CallOverrides
+    ): Promise<boolean>;
+
+    "withdrawWithProof(bytes)"(
       proof: BytesLike,
       overrides?: CallOverrides
     ): Promise<boolean>;
@@ -218,6 +262,10 @@ export class Bank extends Contract {
     lineSuccessfullyCreated(
       undefined: null
     ): TypedEventFilter<[boolean], { arg0: boolean }>;
+
+    tokensSuccessfullyCreated(
+      undefined: null
+    ): TypedEventFilter<[BigNumber], { arg0: BigNumber }>;
   };
 
   estimateGas: {
@@ -251,12 +299,22 @@ export class Bank extends Contract {
 
     verifyProof(
       proof: BytesLike,
-      overrides?: CallOverrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
     "verifyProof(bytes)"(
       proof: BytesLike,
-      overrides?: CallOverrides
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    withdrawWithProof(
+      proof: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
+    "withdrawWithProof(bytes)"(
+      proof: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
   };
 
@@ -291,12 +349,22 @@ export class Bank extends Contract {
 
     verifyProof(
       proof: BytesLike,
-      overrides?: CallOverrides
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
     "verifyProof(bytes)"(
       proof: BytesLike,
-      overrides?: CallOverrides
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    withdrawWithProof(
+      proof: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    "withdrawWithProof(bytes)"(
+      proof: BytesLike,
+      overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
   };
 }

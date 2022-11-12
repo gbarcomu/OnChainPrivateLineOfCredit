@@ -25,3 +25,9 @@ npx hardhat run scripts/deploy.js --network localhost
 ```sh
 npm start
 ```
+
+6. Execute command line app
+
+```sh
+npx ts-node bankCommandLineApp/{fileName}.ts
+```

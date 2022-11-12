@@ -4,6 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 import { loadEthereumChainId, switchNetwork, openLineOfCredit } from './ethereumConnector.js';
 import { useEffect, useState } from 'react';
 
@@ -23,17 +24,28 @@ function BankPrivateApp() {
     window.location.reload();
   });
 
-  const [totalCreditAmount, setTotalCreditAmount] = useState("100000");
+  const [creditLineParameters, setCreditLineParameters] = useState({});
+  const [lineOfCreditReceipt, setLineOfCreditReceipt] = useState(false);
 
   async function handleSubmit(event) {
     event.preventDefault();
     try {
-      openLineOfCredit();
+      openLineOfCredit(JSON.parse(creditLineParameters)).then(val => {
+        setLineOfCreditReceipt(val.logs[0].data.substr(65, 1) === "1" ? "true":"false");
+        handleShow();
+      });
     }
     catch (err) {
       console.error(err);
     }
   }
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => {
+    setShow(false);
+    window.location.reload();
+  }
+  const handleShow = () => setShow(true);
 
   return (
     <div>
@@ -51,8 +63,8 @@ function BankPrivateApp() {
           <Row>
             <Form onSubmit={handleSubmit}>
               <Form.Group className="mb-3">
-                <Form.Label>Amount</Form.Label>
-                <Form.Control type="number" placeholder="100000" onChange={e => setTotalCreditAmount(e.target.value)}/>
+                <Form.Label>Credit Line init parameters</Form.Label>
+                <Form.Control as="textarea" rows={3} onChange={e => setCreditLineParameters(e.target.value)}/>
               </Form.Group>
               <Button variant="dark" type="submit">Submit</Button>
             </Form>
@@ -61,6 +73,20 @@ function BankPrivateApp() {
         <Col>
         </Col>
       </Row>
+
+      <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Transaction result</Modal.Title>
+        </Modal.Header>
+
+        <Modal.Body>
+                Has line of credit been created?: <p>{lineOfCreditReceipt}</p>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>Close</Button>
+        </Modal.Footer>
+      </Modal>
+
     </div>
   );
 }

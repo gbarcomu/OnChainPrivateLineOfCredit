@@ -30,6 +30,8 @@ async function main() {
 
     argControl();
 
+    const userId = process.argv[2];
+
     const userSecretKey = randomBytes(32);
     const userSecretKeyHex = userSecretKey.toString('hex');
     const maximumAllowance = +process.argv[3];
@@ -42,14 +44,15 @@ async function main() {
     const accruedInterestHash = await calculatePedersen(userSecretKey, accruedInterest);
 
     const creditLineInitParams = {
-        userSecretKeyHex,
+        userId,
         maximumAllowanceHash,
         disposedAmountHash,
         interestRateHash,
         accruedInterestHash
     }
     
-    console.log(creditLineInitParams);
+    console.log(JSON.stringify(creditLineInitParams));
+    console.log(`User secret key: ${userSecretKeyHex}. Keep it safe, do not share`);
 }
 
 main();

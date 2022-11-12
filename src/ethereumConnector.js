@@ -48,18 +48,18 @@ export async function switchNetwork() {
     }
 }
 
-export async function openLineOfCredit() {
+export async function openLineOfCredit(creditLineParameters) {
     await loadEthereumAccount();
     const provider = new ethers.providers.Web3Provider(window.ethereum);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(BANK_ADDRESS, Bank.abi, signer);
     try {
         const transaction = await contract.openLineOfCredit(
-            "123",
-            "0x6162636400000000000000000000000000000000000000000000000000000000",
-            "0x6162636400000000000000000000000000000000000000000000000000000000",
-            "0x6162636400000000000000000000000000000000000000000000000000000000",
-            "0x6162636400000000000000000000000000000000000000000000000000000000",
+            creditLineParameters.userId,
+            creditLineParameters.maximumAllowanceHash,
+            creditLineParameters.disposedAmountHash,
+            creditLineParameters.interestRateHash,
+            creditLineParameters.accruedInterestHash,
         );
         const txResult = await transaction.wait();
         return txResult;

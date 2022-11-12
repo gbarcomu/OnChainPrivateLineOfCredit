@@ -34,7 +34,11 @@ interface BankInterface extends ethers.utils.Interface {
     data: BytesLike
   ): Result;
 
-  events: {};
+  events: {
+    "lineSuccessfullyCreated(bool)": EventFragment;
+  };
+
+  getEvent(nameOrSignatureOrTopic: "lineSuccessfullyCreated"): EventFragment;
 }
 
 export class Bank extends Contract {
@@ -126,7 +130,7 @@ export class Bank extends Contract {
       _interestRateHash: BytesLike,
       _accruedInterestsHash: BytesLike,
       overrides?: CallOverrides
-    ): Promise<boolean>;
+    ): Promise<void>;
 
     "openLineOfCredit(uint256,bytes32,bytes32,bytes32,bytes32)"(
       userId: BigNumberish,
@@ -135,10 +139,14 @@ export class Bank extends Contract {
       _interestRateHash: BytesLike,
       _accruedInterestsHash: BytesLike,
       overrides?: CallOverrides
-    ): Promise<boolean>;
+    ): Promise<void>;
   };
 
-  filters: {};
+  filters: {
+    lineSuccessfullyCreated(
+      undefined: null
+    ): TypedEventFilter<[boolean], { arg0: boolean }>;
+  };
 
   estimateGas: {
     openLineOfCredit(

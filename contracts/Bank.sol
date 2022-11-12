@@ -5,6 +5,8 @@ import "./USDFoo.sol";
 
 contract Bank {
 
+    event lineSuccessfullyCreated(bool);
+
     mapping(uint256 => UserStatus) userId_userStatus;
     USDFoo usdFoo;
 
@@ -22,10 +24,10 @@ contract Bank {
 
     // NOTE: This function should be onlyOwner, however, for the shake of the demo, can be accessed by anyone
     function openLineOfCredit(uint256 userId, bytes32 _maximumAllowanceHash, bytes32 _disposedAmountHash,
-      bytes32 _interestRateHash, bytes32 _accruedInterestsHash) public returns (bool){
+      bytes32 _interestRateHash, bytes32 _accruedInterestsHash) public {
         //TODO Check user not exists
         userId_userStatus[userId] = UserStatus(_maximumAllowanceHash, _disposedAmountHash, _interestRateHash, _accruedInterestsHash);
-        return true;
+        emit lineSuccessfullyCreated(true);
     }
 
     

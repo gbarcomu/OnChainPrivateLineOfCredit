@@ -31,3 +31,16 @@ npm start
 ```sh
 npx ts-node bankCommandLineApp/{fileName}.ts
 ```
+
+7. Compile circuit
+
+```sh
+cd withdrawProofGenerator/circuits
+nargo compile p
+```
+
+8. Generate verifier smart contract
+
+```sh
+npx ts-node generate_sol_verifier.ts
+```

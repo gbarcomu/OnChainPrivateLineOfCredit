@@ -32,6 +32,12 @@ module.exports = {
       }
     },
   },
-  solidity: "0.8.7",
+  solidity: {
+    version: '0.8.10',
+    settings: {
+      evmVersion: 'london',
+      optimizer: { enabled: true, runs: 5000 },
+    }
+  }
 };
 

@@ -13,8 +13,13 @@ async function main() {
   await uSDFoo.deployed();
   console.log("USDFoo deployed to:", uSDFoo.address);
 
+  const TurboVerifier = await hre.ethers.getContractFactory("TurboVerifier");
+  const turboVerifier = await TurboVerifier.deploy();
+  await turboVerifier.deployed();
+  console.log("TurboVerifier deployed to:", turboVerifier.address);
+
   const Bank = await hre.ethers.getContractFactory("Bank");
-  const bank = await Bank.deploy(uSDFoo.address);
+  const bank = await Bank.deploy(uSDFoo.address, turboVerifier.address);
   await bank.deployed();
   console.log("Bank deployed to:", bank.address);
 }

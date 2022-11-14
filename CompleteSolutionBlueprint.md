@@ -71,3 +71,59 @@ fn main(userSecretKey: Field, withdraw: pub Field, totalAllowance: Field, totalA
     newTotalDisposedAmountHash[0]
 }
 ```
+
+# Complete Flow -> Withdraw and Amortization with interests
+
+# Legend
+
+- {parameter}h: Parameter hashed
+- n{parameter}: New parameter
+- IR: Interest Rate
+- TA: Total Allowance
+- W: Withdraw Amount
+- A: Amortize Amount
+- DA: Disposed Amount
+- AI: Accrued Interest
+- SK: Secret Key
+- T0: Last Withdrawal or Amortization Timestamp
+- T1: Current Timestamp
+- h: Pedersen Hash
+
+# NoirCircuit
+
+Pseudocode
+
+```
+witdraw(SK, W pub, TA, TAh pub, DA, DAh pub, AI, AIh pub, IR, IRh pub, T0 pub, T1 pub) {
+
+    constrain ph(TA, SK) == TAh
+    constrain ph(DA, SK) == DAh
+    constrain ph(AI, SK) == AIh
+    constrain ph(IR, SK) == IRh
+
+    constrain W + DA <= TA
+
+    nAI = AI + DA * (T1 - T0) * IR
+    nDA = W + DA
+
+    return nDA, nAI
+}
+
+amortize(SK, A pub, TA, TAh pub, DA, DAh pub, AI, AIh pub, IR, IRh pub, T0 pub, T1 pub) {
+
+    constrain ph(TA, SK) == TAh
+    constrain ph(DA, SK) == DAh
+    constrain ph(AI, SK) == AIh
+    constrain ph(IR, SK) == IRh
+
+    nAI = AI + DA * (T1 - T0) * IR
+
+    constrain A >= nAI
+    constrain DA >= A - nAI
+
+    nDA = DA - (A - nAI)
+    nAI = 0
+
+    return nDA, nAI
+}
+```

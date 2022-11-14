@@ -1,6 +1,8 @@
 ## Project Pitch
 [PITCH](PITCH.pdf)
 
+## Complete Solution Blueprint
+[Complete Solution Blueprint](CompleteSolutionBlueprint.md)
 
 ## Run locally
 
